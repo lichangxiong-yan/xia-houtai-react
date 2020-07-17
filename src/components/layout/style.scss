@@ -1,0 +1,26 @@
+.ant-layout {
+  height: 100%;
+}
+
+// header
+.ant-layout-header {
+  background-color: white;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+}
+
+// 侧边栏
+.ant-layout-sider {
+  background-color: #aaa;
+}
+
+// 主体区域
+.ant-layout-content {
+  .qf-content {
+    margin: 10px;
+    background: white;
+    height: 100%;
+    padding: 20px;
+  }
+}

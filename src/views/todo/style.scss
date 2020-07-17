@@ -1,0 +1,9 @@
+.row {
+  line-height: 40px;
+  &>span {
+    padding: 0 10px;
+  }
+  &>span:last-child {
+    cursor: pointer;
+  }
+}

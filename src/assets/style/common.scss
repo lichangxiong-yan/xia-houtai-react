@@ -1,0 +1,27 @@
+$size1: 50px;
+$color1: red;
+
+.test {
+  font-size: $size1;
+  color: $color1;
+}
+
+
+
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: #ccc;
+  overflow: hidden;
+}
+.app {
+  height: 100%;
+  width: 100%;
+  background-color: #ccc;
+}
