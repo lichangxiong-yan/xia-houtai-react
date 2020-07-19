@@ -5,7 +5,6 @@ const Home = loadable(()=>import('./home/Home'))
 const Good = loadable(()=>import('./good/Good'))
 const GoodAdd = loadable(()=>import('./good/GoodAdd'))
 
-
 const Todo = loadable(()=>import('./todo/Todo'))
 
 export default [

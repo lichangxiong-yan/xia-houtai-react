@@ -15,11 +15,12 @@ export default class QfLayout extends React.Component {
     this.state ={}
   }
   render() {
+    let token = localStorage.getItem('token')
     return (
       <Layout>
-       <Sider width={135}>
-          <QfSider />
-       </Sider>
+        <Sider width={135}>
+           <QfSider />
+        </Sider>
        <Layout>
          <Header>
             <QfHeader />
