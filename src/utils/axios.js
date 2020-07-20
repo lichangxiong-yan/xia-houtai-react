@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 
-let baseURL = 'http://localhost:8888/api/v1'  // 本地服务器
+let baseURL = 'http://localhost:8888'  // 本地服务器
 
 // 创建axios实例
 const fetch = axios.create({
@@ -24,7 +24,7 @@ fetch.interceptors.request.use((config) => {
 // 封装响应拦截器
 fetch.interceptors.response.use((response) => {
 
-  let code =  response.data.code
+  let code =  response.data.err
   // 请求成功
   // console.log('响应拦截', response)
   // 数据过滤，根据后端标识字符来进行数据
