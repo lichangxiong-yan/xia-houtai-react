@@ -16,6 +16,7 @@ export function login(data) {
   })
 }
 
+// 获取商品列表
 export function getGoodList(params) {
   return axios({
     url: '/jd/getHotGoodList',
@@ -24,6 +25,7 @@ export function getGoodList(params) {
   })
 }
 
+// 添加商品
 export function addGood(data) {
   return axios({
     url: '/jd/addGood',
@@ -35,6 +37,15 @@ export function addGood(data) {
 export function delGood(params) {
   return axios({
     url: '/jd/delGood',
+    method: 'GET',
+    params
+  })
+}
+
+// 获取所有品类
+export function fetchCates(params) {
+  return axios({
+    url: '/jd/getAllCates',
     method: 'GET',
     params
   })

@@ -49,6 +49,7 @@ class Login extends React.Component {
         name="basic"
         onFinish={this.onLogin.bind(this)}
       >
+        { /* eslint-disable */ }
         <Form.Item
           label="用户名"
           name="username"
@@ -64,6 +65,7 @@ class Login extends React.Component {
         >
           <Input />
         </Form.Item>
+        { /* eslint-enable */ }
 
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">

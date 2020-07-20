@@ -11,3 +11,7 @@ export const TODO_CLEAR = 'TODO_CLEAR'
 
 // cnode
 export const CNODE_LIST = 'CNODE_LIST'
+
+// 商品管理
+export const GET_CATES = 'GET_CATES'
+export const GET_GOOD_LIST = 'GET_GOOD_LIST'

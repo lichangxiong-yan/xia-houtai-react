@@ -5,11 +5,13 @@ import thunk from 'redux-thunk'
 // 分模块后的子reducer
 import testReducer from './reducers/test'
 import todoReducer from './reducers/todo'
+import goodReducer from './reducers/good'
 
 // 把多个子reducer函数，合并成一个reducer
 const reducer = combineReducers({
   test: testReducer,
-  todo: todoReducer
+  todo: todoReducer,
+  good: goodReducer
 })
 
 // 创建一个store，第一参数是必填，它是reducer

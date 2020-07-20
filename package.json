@@ -77,7 +77,6 @@
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
-      "eqeqeq": 0
     }
   },
   "browserslist": {

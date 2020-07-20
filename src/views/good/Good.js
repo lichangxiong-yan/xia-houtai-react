@@ -8,15 +8,28 @@ import {
   Col,
   Input,
   DatePicker,
-  Modal
+  Modal,
+  Button
 } from 'antd'
 import { CateSelect } from '@/components'
 
 import img from '@/utils/img'
+import { connect } from 'react-redux'
+import { getGoods } from '@/store/actions/good'
 
 const { RangePicker } = DatePicker
 
-export default class Good extends React.Component {
+function mapStateToProps(state) {
+  return {
+    goodArr: state.good.goodArr
+  }
+}
+function mapActionToProps(dispatch) {
+  return {
+    getGoods: (params)=>dispatch(getGoods(params))
+  }
+}
+class Good extends React.Component {
 
   constructor(props) {
     super(props)
@@ -25,22 +38,19 @@ export default class Good extends React.Component {
       visible: false,
       row: {},
       data: [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer'],
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser'],
-        }
-      ]
+
+      ],
+      params: {
+        page: 1,
+        size: 2,
+        cate: '',
+        hot: true
+      }
     }
+  }
+
+  componentDidMount() {
+    this.props.getGoods(this.state.params)
   }
 
   // 品类筛选
@@ -52,11 +62,12 @@ export default class Good extends React.Component {
   // 根据日期进行筛选
   dateFilter(dates) {
     console.log('dates', dates)
-    console.log()
-    console.log()
 
     let startTime = dates[0].format('YYYY-MM-DD HH:mm:ss')
     let endTime = dates[1].valueOf()
+
+    console.log('st', startTime)
+    console.log('et', endTime)
 
     // YYYY-MM-DD HH:mm:ss
     // 做一些时间格式的处理工作
@@ -87,9 +98,14 @@ export default class Good extends React.Component {
 
     }
   }
+  // 跳转到新增页面
+  skip() {
+    this.props.history.push('/good/add')
+  }
 
   render() {
-    let { data, cate, visible, row } = this.state
+    let { cate, visible, row } = this.state
+    let { goodArr } = this.props
     const columns = [
       {
         title: 'Name',
@@ -98,21 +114,21 @@ export default class Good extends React.Component {
         render: (text, row, index)=>{
           return (
             <div>
-              <img style={{display:'inline-block',width:'50px',height:'50px'}} src={img.abc} alt=""/>
+              <img style={{display:'inline-block',width:'50px',height:'50px'}} src={row.img} alt=""/>
               <div>{text}</div>
             </div>
           )
         }
       },
       {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: '商品描述',
+        dataIndex: 'desc',
+        key: 'desc',
       },
       {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
+        title: '价格',
+        dataIndex: 'price',
+        key: 'price',
       },
       {
         title: '操作',
@@ -121,8 +137,10 @@ export default class Good extends React.Component {
         render: (text, row)=> {
           return (
             <div className='table-handle'>
+              { /* eslint-disable */ }
               <a onClick={this.tableRowHandle.bind(this,'edit', row)}>编辑</a>
               <a>删除</a>
+              { /* eslint-enable */ }
             </div>
           )
         }
@@ -132,18 +150,21 @@ export default class Good extends React.Component {
     return (
       <div>
         <Divider orientation="left">商品列表</Divider>
+        <div>
+          <Button onClick={this.skip.bind(this)} size='small'>新增</Button>
+        </div>
         <div style={{marginTop:'20px', marginBottom:'20px'}}>
-          <Row align='middle'>
+          <Row align='middle' style={{textAlign:'center'}}>
             <Col span={2}>
               <span>名称搜索:</span>
             </Col>
             <Col span={4}>
               <Input allowClear={true} />
             </Col>
-            <Col span={2}>
+            <Col span={2} push={2}>
               <span>品类筛选:</span>
             </Col>
-            <Col span={6}>
+            <Col span={6} push={2}>
               <CateSelect value={cate} onChange={this.cateFilter.bind(this)}></CateSelect>
             </Col>
           </Row>
@@ -160,7 +181,8 @@ export default class Good extends React.Component {
             </Col>
           </Row>
         </div>
-        <Table columns={columns} dataSource={data} />
+        { /* rowKey一定要加，否则报错 */ }
+        <Table columns={columns} rowKey='_id' dataSource={goodArr} />
         <Modal
           title="商品操作"
           visible={visible}
@@ -174,3 +196,5 @@ export default class Good extends React.Component {
     )
   }
 }
+
+export default connect(mapStateToProps, mapActionToProps)(Good)

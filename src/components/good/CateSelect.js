@@ -1,27 +1,36 @@
 import React from 'react'
 
 import { Select } from 'antd'
+// 状态管理
+import { connect } from 'react-redux'
+import { getCates } from '@/store/actions/good'
+
 const { Option } = Select
 
 // 业务组件（UI组件+业务数据）
 // 使用 Prop-Types 进行属性验证、默认值
-export default class CateSelect extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      cates: [
-        { id: 1, cate: 'a', cate_zh: '手机数码' },
-        { id: 2, cate: 'b', cate_zh: '汽车之家' },
-        { id: 3, cate: 'c', cate_zh: '女士服装' },
-      ]
-    }
+function mapStateToProps(state) {
+  return {
+    cateArr: state.good.cateArr
+  }
+}
+function mapActionToProps(dispatch) {
+  return {
+    getCates: (params)=>dispatch(getCates(params))
+  }
+}
+
+class CateSelect extends React.Component {
+
+  componentDidMount() {
+    this.props.getCates({})
   }
 
   createSelect() {
-    let { cates } = this.state
-    return cates.map(ele=>(
-      <Option key={ele.id} value={ele.cate}> {ele.cate_zh}</Option>
+    let { cateArr } = this.props
+    return cateArr.map(ele=>(
+      <Option key={ele._id} value={ele.cate}> {ele.cate_zh}</Option>
     ))
 
   }
@@ -30,11 +39,13 @@ export default class CateSelect extends React.Component {
     let { value } = this.props
     value = value || ''
     return (
-      <div style={{width:'100%'}}>
-        <Select value={value} onChange={(val)=>this.props.onChange(val)}>
+      <div>
+        <Select style={{width:'100%'}} value={value} onChange={(val)=>this.props.onChange(val)}>
           { this.createSelect() }
         </Select>
       </div>
     )
   }
 }
+
+export default connect(mapStateToProps, mapActionToProps)(CateSelect)
