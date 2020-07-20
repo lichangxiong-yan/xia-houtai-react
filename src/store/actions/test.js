@@ -31,3 +31,11 @@ export function cnode(params) {
     })
   }
 }
+
+export function login(params) {
+  return function(dispatch) {
+    setTimeout(()=>{
+      localStorage.setItem('token', 123)
+    },300)
+  }
+}
