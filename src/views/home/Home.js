@@ -21,8 +21,6 @@ function mapActionToProps(dispatch) {
   }
 }
 
-
-
 class Home extends React.Component {
   constructor(props) {
     super(props)
@@ -47,7 +45,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log('-------', this.props)
     return(
       <div>
         <h1>首页</h1>

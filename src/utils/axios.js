@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { message } from 'antd'
 
-let baseURL = 'http://localhost:8888'  // 本地服务器
+let baseURL = 'http://localhost:8888'  // 开发环境
+// let baseURL = 'http://baidu.com'  // 生产环境
+// let baseURL = 'http://xxxxx.com'  // 测试环境
 
 // 创建axios实例
 const fetch = axios.create({

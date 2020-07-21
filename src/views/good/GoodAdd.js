@@ -10,123 +10,124 @@ import {
 } from 'antd'
 import { CateSelect } from '@/components'
 import img from '@/utils/img'
-import { addGood } from '@/utils/api'
 
 import { connect } from 'react-redux'
+import { getGoodDetail, changeDetail } from '@/store/actions/good'
+import { addGood } from '@/utils/api'
 
 const { TextArea } = Input
-
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
-};
-
+}
 const tailLayout = {
   wrapperCol: { offset: 4, span: 16 }
-}
-
-function mapStateToProps(state) {
-  return {
-
-  }
-}
-function mapActionToProps(dispatch) {
-  return {
-
-  }
 }
 
 class GoodAdd extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      // cate: 'a'
-      imageUrl: img.uploadIcon
+  }
+  // mounted
+  componentDidMount() {
+    let good_id = this.props.match.params.id
+    if (good_id) {
+      this.props.getGoodDetail({good_id})
     }
   }
 
-  // 添加商品
-  onFinish(data) {
-    data.img = this.state.imageUrl
-    console.log('提交', data)
-    addGood(data).then(()=>{
+  // 表单变化
+  change(key, e) {
+    let kv = {key, val: ''}
+    switch (key) {
+      case 'price':
+        kv.val = e
+        break;
+      case 'cate':
+        kv.val = e
+        break;
+      case 'img':
+        let { file } = e
+        if (file.response) {
+          kv.val = img.uploadUrl+file.response.data.url
+        }
+        break;
+      case 'hot':
+        kv.val = e.target.checked
+        break;
+      default:
+        kv.val = e.target.value
+    }
+    this.props.changeDetail(kv)
+  }
+
+  // 添加或编辑商品
+  onFinish() {
+    let { detail } = this.props
+    // 有id表示编辑，无id就是添加
+    if (detail._id) {
+      detail.id = detail._id
+    }
+    addGood(detail).then(()=>{
       // 添加成功，返回列表页
-      // console.log('props', this.props)
       this.props.history.goBack()
     })
   }
 
-  cateSelect(val) {
-    this.setState({cate: val})
-    console.log('cate--------------------',val)
-  }
-
-  // 图片上传
-  imgChange({file}) {
-    if (file.response) {
-      console.log('file', file.response.data.url)
-      this.setState({
-        imageUrl: img.uploadUrl+file.response.data.url
-      })
-    }
-  }
-
   render() {
-    let { imageUrl } = this.state
+    let { detail } = this.props
+
     return (
       <div className='good-add'>
-        <h1>商品添加</h1>
+        <h1>{detail._id ? '商品编辑' : '商品添加'}</h1>
         <Form
           {...layout}
           name="basic"
-          initialValues={{ hot: false, cate: '' }}
           onFinish={this.onFinish.bind(this)}
         >
           <Form.Item
             label="商品名称"
-            name="name"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <Input />
+            <Input
+              value={detail.name}
+              onChange={this.change.bind(this,'name')} />
           </Form.Item>
 
           <Form.Item
             label="商品描述"
-            name="desc"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <TextArea row={4} />
+            <TextArea
+              row={4}
+              value={detail.desc}
+              onChange={this.change.bind(this,'desc')} />
           </Form.Item>
 
           <Form.Item
             label="商品价格"
-            name="price"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <InputNumber />
+            <InputNumber
+            value={detail.price}
+            onChange={this.change.bind(this,'price')} />
           </Form.Item>
-
-          {/*<Form.Item
-            label="手机号码"
-            name="mobile"
-            rules={[{ required: true, pattern: /^[1][0-9]{10}$/, message: '请输入11位的手机号码' }]}
-          >
-            <Input />
-          </Form.Item>*/}
 
           <Form.Item
             label='选择品类'
-            name='cate'
           >
             <CateSelect
-              value={this.state.cate}
-              onChange={this.cateSelect.bind(this)}
+              value={detail.cate}
+              onChange={this.change.bind(this,'cate')}
             >
             </CateSelect>
           </Form.Item>
 
-          <Form.Item {...tailLayout} name="hot" valuePropName="checked">
-            <Checkbox>是否热销</Checkbox>
+          <Form.Item {...tailLayout}>
+            <Checkbox
+              value={detail.hot}
+              onChange={this.change.bind(this,'hot')}
+            >是否热销</Checkbox>
           </Form.Item>
 
           <Form.Item {...tailLayout}>
@@ -138,23 +139,32 @@ class GoodAdd extends React.Component {
               className="avatar-uploader"
               showUploadList={false}
               action={img.uploadUrl+'/jd/upload/img'}
-              onChange={this.imgChange.bind(this)}
+              onChange={this.change.bind(this, 'img')}
             >
-              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              <img src={detail.img} alt="avatar" style={{ width: '100%' }} />
             </Upload>
           </Form.Item>
 
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
-              提交
+              { detail._id ? '修改' : '添加'}
             </Button>
           </Form.Item>
-
-
         </Form>
       </div>
     )
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    detail: state.good.goodDetail
+  }
+}
+function mapActionToProps(dispatch) {
+  return {
+    getGoodDetail: (params)=>dispatch(getGoodDetail(params)),
+    changeDetail: (payload)=>dispatch(changeDetail(payload))
+  }
+}
 export default connect(mapStateToProps, mapActionToProps)(GoodAdd)

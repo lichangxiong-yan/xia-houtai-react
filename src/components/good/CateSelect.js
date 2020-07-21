@@ -41,6 +41,7 @@ class CateSelect extends React.Component {
     return (
       <div>
         <Select style={{width:'100%'}} value={value} onChange={(val)=>this.props.onChange(val)}>
+        <Option value=''>全部</Option>
           { this.createSelect() }
         </Select>
       </div>

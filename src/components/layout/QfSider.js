@@ -13,7 +13,6 @@ export default class QfSider extends React.Component {
 
   // 生成二级菜单
   createMenuItem(children) {
-    console.log(children)
     return children.map(ele=>(
       <Menu.Item key={ele.id}>
         <NavLink to={ele.path}>{ ele.text }</NavLink>

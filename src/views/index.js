@@ -44,7 +44,7 @@ export default [
         children: [
           {
             id: 30101,
-            path: '/good/add',
+            path: '/good/add/:id',
             component: GoodAdd,
             text: '商品添加'
           }

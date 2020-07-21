@@ -15,7 +15,6 @@ export default class QfLayout extends React.Component {
     this.state ={}
   }
   render() {
-    let token = localStorage.getItem('token')
     return (
       <Layout>
         <Sider width={135}>

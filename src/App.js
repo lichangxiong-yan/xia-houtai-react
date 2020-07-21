@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import { Layout, Login } from '@/components'
 
 // 路由
-import { HashRouter, Route, Redirect, withRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 
 // 状态管理
 import { Provider } from 'react-redux'

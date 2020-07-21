@@ -15,3 +15,5 @@ export const CNODE_LIST = 'CNODE_LIST'
 // 商品管理
 export const GET_CATES = 'GET_CATES'
 export const GET_GOOD_LIST = 'GET_GOOD_LIST'
+export const GET_GOOD_DETAIL = 'GET_GOOD_DETAIL'
+export const CHANGE_DETAIL = 'CHANGE_DETAIL'

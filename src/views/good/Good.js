@@ -21,7 +21,7 @@ const { RangePicker } = DatePicker
 
 function mapStateToProps(state) {
   return {
-    goodArr: state.good.goodArr
+    goodData: state.good.goodData
   }
 }
 function mapActionToProps(dispatch) {
@@ -34,12 +34,9 @@ class Good extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      cate: '',
       visible: false,
       row: {},
-      data: [
-
-      ],
+      // 查询
       params: {
         page: 1,
         size: 2,
@@ -53,14 +50,35 @@ class Good extends React.Component {
     this.props.getGoods(this.state.params)
   }
 
+  // 专门用来做筛选
+  filterChange(key, value) {
+    // 改变params
+    let { params } = this.state
+    if (key != 'page') params.page = 1
+    params[key] = value
+    this.setState({params})
+    // 调接口
+    this.props.getGoods(params)
+  }
+
   // 品类筛选
-  cateFilter(val) {
-    this.setState({cate: val})
-    // 调接口进行筛选
+  cateChange(val) {
+    this.filterChange('cate', val)
+  }
+
+  // 页码变化
+  pageChange(page,size) {
+    console.log(page, size)
+    this.filterChange('page', page)
+  }
+  // size变化
+  sizeChange(current, size) {
+    console.log(current,size)
+    this.filterChange('size', size)
   }
 
   // 根据日期进行筛选
-  dateFilter(dates) {
+  dateChange(dates) {
     console.log('dates', dates)
 
     let startTime = dates[0].format('YYYY-MM-DD HH:mm:ss')
@@ -78,14 +96,16 @@ class Good extends React.Component {
   tableRowHandle(type, row) {
     switch (type) {
       case 'edit':
+        this.props.history.push('/good/add/'+row._id)
+        break;
+      case 'delete':
         this.setState({visible: true, row:row})
         break;
       default:
-
     }
   }
 
-  // 编辑功能
+  // model弹框事件
   modelBtnClick(type) {
     switch (type) {
       case 'ok':
@@ -100,12 +120,16 @@ class Good extends React.Component {
   }
   // 跳转到新增页面
   skip() {
-    this.props.history.push('/good/add')
+    console.log('111')
+    // 构造动态参数
+    let id =0
+    this.props.history.push('/good/add/'+id)
   }
 
+
   render() {
-    let { cate, visible, row } = this.state
-    let { goodArr } = this.props
+    let { params, visible, row } = this.state
+    let { goodData } = this.props
     const columns = [
       {
         title: 'Name',
@@ -139,7 +163,7 @@ class Good extends React.Component {
             <div className='table-handle'>
               { /* eslint-disable */ }
               <a onClick={this.tableRowHandle.bind(this,'edit', row)}>编辑</a>
-              <a>删除</a>
+              <a onClick={this.tableRowHandle.bind(this,'delete', row)}>删除</a>
               { /* eslint-enable */ }
             </div>
           )
@@ -165,7 +189,7 @@ class Good extends React.Component {
               <span>品类筛选:</span>
             </Col>
             <Col span={6} push={2}>
-              <CateSelect value={cate} onChange={this.cateFilter.bind(this)}></CateSelect>
+              <CateSelect value={params.cate} onChange={this.cateChange.bind(this)}></CateSelect>
             </Col>
           </Row>
 
@@ -177,12 +201,27 @@ class Good extends React.Component {
               <RangePicker
                 format='YYYY-MM-DD HH:mm:ss'
                 showTime
-                onChange={this.dateFilter.bind(this)} />
+                onChange={this.dateChange.bind(this)} />
             </Col>
           </Row>
         </div>
         { /* rowKey一定要加，否则报错 */ }
-        <Table columns={columns} rowKey='_id' dataSource={goodArr} />
+        <Table
+          columns={columns}
+          rowKey='_id'
+          dataSource={goodData.list}
+          pagination={
+            {
+              total: goodData.total,
+              defaultPageSize: 2,
+              showSizeChanger: true,
+              pageSizeOptions: ['2','3','4','5','10'],
+              showQuickJumper: true,
+              onChange: this.pageChange.bind(this),
+              onShowSizeChange: this.sizeChange.bind(this)
+            }
+          }
+        />
         <Modal
           title="商品操作"
           visible={visible}

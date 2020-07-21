@@ -1,11 +1,14 @@
 import {
   GET_CATES,
-  GET_GOOD_LIST
+  GET_GOOD_LIST,
+  GET_GOOD_DETAIL,
+  CHANGE_DETAIL
 } from '../actionTypes'
 
 let initState = {
   cateArr: [],
-  goodArr: []
+  goodData: {},
+  goodDetail: {}
 }
 
 export default function goodReducer(state=initState, action) {
@@ -16,7 +19,15 @@ export default function goodReducer(state=initState, action) {
       return newState
     case GET_GOOD_LIST:
       console.log('收到了', action)
-      newState.goodArr = action.payload
+      newState.goodData = action.payload
+      return newState
+    case GET_GOOD_DETAIL:
+      newState.goodDetail = action.payload
+      return newState
+    case CHANGE_DETAIL:
+      // 改变goodDetail
+      console.log(action.payload)
+      newState.goodDetail[action.payload.key] = action.payload.val
       return newState
     default:
       return state

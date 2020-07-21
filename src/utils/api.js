@@ -50,3 +50,12 @@ export function fetchCates(params) {
     params
   })
 }
+
+// 获取商品详情
+export function fetchGoodDetail(params) {
+  return axios({
+    url: '/jd/getGoodDetail',
+    method: 'GET',
+    params
+  })
+}
